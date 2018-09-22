@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 
+// Count(i) - длина строки на данной итерации
 int Count(int n)
 {
     return (int)pow(2, n) - 1;
@@ -17,7 +18,6 @@ void GenerateString(int n, char* str)
         char next_letter = (char)('a' + i);
         str[Count(i)] = next_letter;
         strncpy(str + Count(i) + 1, str, Count(i));
-        // Count(i) - длина строки на данной итерации
     }
     str[Count(n)] = '\0';
 }

@@ -5,6 +5,7 @@
 
 #define MAX_STRING_SIZE 1024
 
+// FIXIT: у вас в коде так и остались 1024 и 20
 
 char** Split(char* string, char* delimiters, int* tokensCount);
 

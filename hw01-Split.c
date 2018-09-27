@@ -5,7 +5,6 @@
 
 #define MAX_STRING_SIZE 1024
 
-// FIXIT: у вас в коде так и остались 1024 и 20
 
 char** Split(char* string, char* delimiters, int* tokensCount);
 
@@ -13,9 +12,9 @@ int main() {
     char string[MAX_STRING_SIZE], delimiters[MAX_STRING_SIZE];
     int wordsCount = 0;
     printf("Input string:\n");
-    fgets(string, 1024, stdin);
+    fgets(string, MAX_STRING_SIZE, stdin);
     printf("Input delimiters:\n");
-    fgets(delimiters, 20, stdin);
+    fgets(delimiters, MAX_STRING_SIZE, stdin);
     char** words = Split(string, delimiters, &wordsCount);
     for (int i = 0; i < wordsCount; ++i)
         printf("%s\n", words[i]);

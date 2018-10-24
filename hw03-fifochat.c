@@ -32,6 +32,13 @@ int main(int argc, char *argv[])
     fifo[to_read] = "1.fifo";
     fifo[to_write] = "2.fifo";
 
+    /// это можно было бы написать короче
+    /*
+    fifo[ind] = "1.fifo";
+    fifo[1 - ind] = "2.fifo";
+    */
+    
+    // два последующие mknod одинаковые ... можно сделать цикл от 0 до 1
     if ((mknod(fifo[0], S_IFIFO | 0666, 0) < 0) && (errno != EEXIST))
     {
         printf("Can\'t create FIFO\n");
@@ -61,6 +68,8 @@ int main(int argc, char *argv[])
         }
         while(1)
         {
+            // кажется лишним каждый раз в цикле выделять и освобождать память под строку.
+            // можно выделить память 1 раз до цикла
             string = (char*)calloc(MAX_STRING_SIZE, sizeof(char));
             fgets(string, MAX_STRING_SIZE, stdin);
             write(fd, string, strlen(string));
@@ -79,6 +88,7 @@ int main(int argc, char *argv[])
         }
         while(1)
         {
+            // аналогично память можно выделить 1 раз до цикла
             string = (char*)calloc(MAX_STRING_SIZE, sizeof(char));
             int size = read(fd, string, MAX_STRING_SIZE);
             if (size == 0)

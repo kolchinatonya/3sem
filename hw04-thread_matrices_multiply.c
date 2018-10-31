@@ -1,5 +1,7 @@
+//при запуске программы с утилитой time получено ускорение ~ 2,27 
+//({k = 1000; n = 1000} / {k = 1; n = 1000})
+
 #include <stdio.h>
-#include <time.h>
 #include <stdlib.h>
 #include <pthread.h>
 
@@ -75,17 +77,17 @@ void DeleteMatrix(int **A, int n)
     free(A);
 }
 
-int main()
+// argv[1] - количество потоков, argv[2] - размер матрицы
+int main(int argc, char ** argv)
 {
-    int k, n;
-    printf("Input the number of threads (k):\n");
-    scanf("%d", &k);
-    printf("Input the size of square matrix (n) (n %% k == 0 !):\n");
-    scanf("%d", &n);
+
+    long k = 0, n = 0;
+    k = strtol(argv[1], NULL, 10);
+    n = strtol(argv[2], NULL, 10);
 
     if (n % k != 0)
     {
-        printf("ERROR! (%d %% %d != 0) !", n, k);
+        printf("ERROR! (%ld %% %ld != 0) !", n, k);
         exit(1);
     }
 
@@ -114,9 +116,10 @@ int main()
     for (int i = 0; i < k; i++)
         pthread_join(thread[i], (void **) NULL);
 
-    PrintMatrix(A, n, "A");
-    PrintMatrix(B, n, "B");
-    PrintMatrix(C, n, "C");
+    //PrintMatrix(A, n, "A");
+    //PrintMatrix(B, n, "B");
+    //PrintMatrix(C, n, "C");
+
     DeleteMatrix(A, n);
     DeleteMatrix(B, n);
     DeleteMatrix(C, n);

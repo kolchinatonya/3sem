@@ -40,6 +40,7 @@ void PrintIntField(int** field, int n);
 void Wait(int sockfd, int** server_field, char** my_field);
 void Play(int sockfd, int** server_field, char** my_field);
 int Action(Cell* open, int** server_field, char** my_field);
+int CheckBounds(Cell open);
 int OpenCell(int** server_field, char** my_field, Cell* to_open, int val);
 void OpenAllCells(int** server_field, char** my_field);
 void PrintFieldWhithIndexes(char** field, int n);
@@ -163,7 +164,6 @@ void Wait(int sockfd, int** server_field, char** my_field)
     while (1)
     {
         recv(sockfd, &inf, sizeof(inf), 0);
-        printf("Status: %d\n", inf.status);
         if (inf.status == 0)
         {
             int val = server_field[inf.open.x][inf.open.y];
@@ -219,14 +219,22 @@ void Play(int sockfd, int** server_field, char** my_field) {
     while(1) {
         system("clear");
         PrintFieldWhithIndexes(my_field, FIELD_SIZE);
-        printf("Put your command: (""F X Y"" or ""O X Y"")\n");
         char command;
-        Cell cur;
-        scanf("%c %d %d", &command, &cur.x, &cur.y);
+        Cell cur = {};
+        printf("Put your command: (< O x y > or < F x y > or < N x y >)\n");
+        if ((scanf("%c %d %d", &command, &cur.x, &cur.y)) != 3)
+            continue;
         cur.x--;
         cur.y--;
+        if (CheckBounds(cur))
+            continue;
         if (command == 'F')
             my_field[cur.x][cur.y] = '%';
+        if (command == 'N')
+        {
+            if (my_field[cur.x][cur.y] == '%')
+                my_field[cur.x][cur.y] = '*';
+        }
         if (command == 'O')
         {
             int status = Action(&cur, server_field, my_field);
@@ -342,6 +350,18 @@ void ClearIntField(int** field, int n)
     for (int i = 0; i < n; i++)
         free(field[i]);
     free(field);
+}
+
+int CheckBounds(Cell open)
+{
+    if ((open.x >= FIELD_SIZE) || (open.x < 0 ) || (open.y >= FIELD_SIZE) || (open.y < 0 ))
+    {
+
+        printf("How you can be so stupid? Where is that cell here??? Try again!\n");
+        sleep(2);
+        return 1;
+    }
+    return 0;
 }
 
 int Action(Cell* open, int** server_field, char** my_field)

@@ -47,26 +47,27 @@ void PrepareForGame(int **field, int* clients, int* lsock);
 
 int main()
 {
-    int** field;
-    int clients[2] = {0, 0}, lsock = 0;
-    PrepareForGame(field, clients, &lsock);
-    Inf inf;
-    int cur_player = 0;
     while (1)
     {
-        recv(clients[cur_player], &inf, sizeof(inf), 0);
-        send(clients[!cur_player], &inf, sizeof(inf), 0);
-        if (inf.status == 1)
-            cur_player = !cur_player;
-        if ((inf.status == -1) || (inf.status == 2))
-        {
-            printf("THE GAME IS OVER!\n");
-            break;
+        int **field;
+        int clients[2] = {0, 0}, lsock = 0;
+        PrepareForGame(field, clients, &lsock);
+        Inf inf;
+        int cur_player = 0;
+        while (1) {
+            recv(clients[cur_player], &inf, sizeof(inf), 0);
+            send(clients[!cur_player], &inf, sizeof(inf), 0);
+            if (inf.status == 1)
+                cur_player = !cur_player;
+            if ((inf.status == -1) || (inf.status == 2)) {
+                printf("THE GAME IS OVER!\n\n");
+                break;
+            }
         }
+        close(clients[0]);
+        close(clients[1]);
+        close(lsock);
     }
-    close(clients[0]);
-    close(clients[1]);
-    close(lsock);
     return 0;
 
 }

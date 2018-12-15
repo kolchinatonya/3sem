@@ -31,7 +31,7 @@ int mine_count, opened_count = 0;
 
 void CheckIP(int argc);
 void Hello();
-void CreateNetConnection(char** IP, int* sockfd, Addr servaddr, Addr cliaddr);
+void CreateNetConnection(char** IP, int* sockfd, Addr  servaddr);
 void GetFieldFromServer(int sockfd, int** server_field);
 void CountMines(int** server_field);
 char** GenerateEmptyField(int n);
@@ -57,9 +57,9 @@ int main(int argc, char **argv) {
     Hello();
 
     int sockfd;
-    Addr servaddr, cliaddr;
+    Addr servaddr;
 
-    CreateNetConnection(argv, &sockfd, servaddr, cliaddr);
+    CreateNetConnection(argv, &sockfd, servaddr);
 
     int **server_field = GenerateEmptyIntField(FIELD_SIZE);
     char **my_field = GenerateEmptyField(FIELD_SIZE);
@@ -95,7 +95,7 @@ void CheckIP(int argc)
 
 void Hello()
 {
-    printf("Hello! Do you want to play Sapper? :) (y/n) \n");
+    printf("\nHello! Do you want to play a new game? :) (y/n) \n");
     char answer;
     scanf("%c", &answer);
     if (answer == 'n')
@@ -111,7 +111,7 @@ void Hello()
     exit(0);
 }
 
-void CreateNetConnection(char** IP, int* sockfd, Addr  servaddr, Addr cliaddr)
+void CreateNetConnection(char** IP, int* sockfd, Addr  servaddr)
 {
     if ((*sockfd = socket (PF_INET, SOCK_STREAM, 0)) == -1)
     {
